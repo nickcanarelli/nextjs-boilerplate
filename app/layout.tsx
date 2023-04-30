@@ -2,7 +2,7 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { Inter } from "next/font/google";
 import { Providers } from "@components/core";
-import "../styles/globals.css";
+import "@styles";
 import clsx from "clsx";
 
 const inter = Inter({ subsets: ["latin"] });

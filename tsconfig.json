@@ -20,6 +20,7 @@
       }
     ],
     "paths": {
+      "@styles": ["./app/_styles/index.css"],
       "@api/*": ["./app/api/*"],
       "@types": ["./app/_types/index.ts"],
       "@hooks": ["./app/_utils/hooks/index.ts"],
