@@ -1,73 +1,66 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const LOCALHOST_URL = "localhost:4000/";
+export const protectedSubdomains = ["admin", "app"];
+
+const isProduction = process.env.NODE_ENV === "production";
+const httpTrimmedUrl = isProduction
+  ? process.env.NEXT_PUBLIC_PROD_HOME_URL!.replace("https://", "")
+  : process.env.NEXT_PUBLIC_DEV_HOME_URL!.replace("http://", "");
 
 export const config = {
   matcher: ["/((?!api/|_next/|_static/|examples/|[\\w-]+\\.\\w+).*)"],
 };
 
-export const getValidSubdomain = (host?: string | null) => {
-  let subdomain: string | null = null;
-  if (!host && typeof window !== "undefined") {
-    // On client side, get the host from window
-    host = window.location.host;
-  }
-  if (host && host.includes(".")) {
-    const candidate = host.split(".")[0];
-    if (candidate && !candidate.includes("localhost")) {
-      // Valid candidate
-      subdomain = candidate;
-    }
-  }
-  return subdomain;
-};
+export enum Subdomains {
+  admin = "admin",
+  app = "app",
+}
 
 export async function middleware(req: NextRequest) {
   const url = req.nextUrl;
 
   // Get hostname of request
-  const hostname = req.headers.get("host") || "localhost:4000";
-
-  // Get subdomain from hostname
-  const subdomain = getValidSubdomain(hostname);
+  const hostname = req.headers.get("host") || httpTrimmedUrl;
 
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
   const path = url.pathname;
 
-  const currentHost =
+  const currentSubdomain =
     process.env.NODE_ENV === "production" && process.env.VERCEL === "1"
       ? hostname.replace(".vercel.pub", "") // Replace .vercel.pub with domain name when we deploy to production
-      : hostname.replace(".localhost:4000", "");
+      : hostname
+          .replace(".localhost:4000", "") // account for localhost & vanity on localhost
+          .replace(".project.com:4000", "");
 
-  // rewrites for app pages
-  if (currentHost === "admin") {
-    // redirect if user is not logged in
-    // if (
-    //   url.pathname === '/login' &&
-    //   (req.cookies.get('next-auth.session-token') ||
-    //     req.cookies.get('__Secure-next-auth.session-token'))
-    // ) {
-    //   url.pathname = '/';
-    //   return NextResponse.redirect(url);
-    // }
+  const isAdminDomain = currentSubdomain === Subdomains.admin;
+  const isAppDomain = currentSubdomain === Subdomains.app;
+  const isProtectedDomain = protectedSubdomains.some(
+    (subdomain) => subdomain === currentSubdomain
+  );
 
-    console.log("admin");
-    return NextResponse.rewrite(
-      new URL(`/sites/${currentHost}${path}`, req.url)
-    );
+  if (isProtectedDomain) {
+    // Redirect if user is not logged in
+
+    // Rewrites for admin pages
+    if (isAdminDomain) {
+      // User is not an admin, redirect to 403 unauthorized
+
+      // User is Admin, allow access
+      return NextResponse.rewrite(
+        new URL(`/sites/${currentSubdomain}${path}`, req.url)
+      );
+    }
+
+    // Rewrite root application to `/app` folder
+    if (isAppDomain) {
+      return NextResponse.rewrite(
+        new URL(`/sites/${currentSubdomain}${path}`, req.url)
+      );
+    }
   }
 
-  // rewrite root application to `/app` folder
-  if (currentHost === "app") {
-    console.log("app");
-    return NextResponse.rewrite(
-      new URL(`/sites/${currentHost}${path}`, req.url)
-    );
-  }
-
-  // rewrite root application to `/home` folder
-  if (currentHost === "localhost:4000") {
-    console.log("home");
+  // Rewrite root application to `/home` folder
+  if (currentSubdomain === httpTrimmedUrl) {
     return NextResponse.rewrite(new URL(`/home${path}`, req.url));
   }
 }

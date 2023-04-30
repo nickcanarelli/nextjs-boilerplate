@@ -1,3 +1,3 @@
 export default function AppIndex() {
-  return <div>App Index</div>;
+  return <div className="text-[80px] font-bold text-primary">App Index</div>;
 }

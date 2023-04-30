@@ -20,9 +20,15 @@
       }
     ],
     "paths": {
+      "@api/*": ["./app/api/*"],
       "@types": ["./app/_types/index.ts"],
+      "@hooks": ["./app/_utils/hooks/index.ts"],
+      "@helpers/*": ["./app/_utils/helpers/*"],
+      "@helpers": ["./app/_utils/helpers/index.ts"],
+      "@actions/*": ["./app/_utils/actions/*"],
+      "@actions": ["./app/_utils/actions/index.ts"],
       "@components/core": ["./app/_components/core/index.ts"],
-      "@utils": ["./app/_utils/index.ts"]
+      "@components/form": ["./app/_components/form/index.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

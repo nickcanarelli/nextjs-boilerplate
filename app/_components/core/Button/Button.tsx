@@ -1,14 +1,14 @@
 "use client";
-// import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import React, {
-  ButtonHTMLAttributes,
-  forwardRef,
-  PropsWithChildren,
-  ReactNode,
-} from "react";
+
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FloatProps } from "@headlessui-float/react";
 import { styles } from "./Button.styles";
 import clsx from "clsx";
+import React, {
+  ButtonHTMLAttributes,
+  PropsWithChildren,
+  ReactNode,
+} from "react";
 
 enum ButtonGroup {
   normal = "normal",
@@ -48,7 +48,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 interface ButtonMenu {
   text: string;
-  icon: any;
+  icon: IconProp;
   onClick: () => void;
 }
 
