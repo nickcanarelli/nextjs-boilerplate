@@ -12,16 +12,35 @@ import {
   faCircleArrowRight,
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
   const { mutateAsync: register, isLoading: isRegistering } = useRegister();
+  const router = useRouter();
   const registerForm = useForm({
     schema,
   });
 
   const handleRegister: SubmitHandler<FieldValues> = async (values) => {
     const { email, password } = values;
-    await register({ email, password });
+    await register(
+      { email, password },
+      {
+        onError: (err: any) => {
+          const { error } = err.response.data;
+          registerForm.setError("email", {
+            type: "manual",
+            message: error,
+          });
+        },
+        onSuccess: () => {
+          const url = new URL(window.location.origin + "/login");
+          url.searchParams.set("email", email);
+
+          router.push(url.href);
+        },
+      }
+    );
   };
 
   return (
@@ -31,9 +50,9 @@ export default function RegisterForm() {
         form={registerForm}
         onSubmit={(values) => handleRegister(values)}
       >
-        <Textfield id="username" label="Username" required />
         <Textfield id="email" label="Email Address" required />
         <Password id="password" label="Password" icon showStrength />
+        <Password id="confirmPassword" label="Confirm Password" icon />
       </FormWrapper>
       <div className="flex flex-col gap-y-4">
         <Button
@@ -103,7 +122,6 @@ export default function RegisterForm() {
 }
 
 const schema = y.object({
-  username: y.string().required("Username is required"),
   email: y
     .string()
     .email("Enter a valid email address")
@@ -119,5 +137,13 @@ const schema = y.object({
       /^(?=.*[\^$*.[\]{}()?\-“!@#%&/,><`:;|_~`])/,
       "Must contain at least one special character"
     )
+    .matches(
+      /^[^\s]+(?:$|.*[^\s]+$)/,
+      "Password cannot begin or end with a space"
+    )
     .required("Password is required"),
+  confirmPassword: y
+    .string()
+    .required("Password confirmation is required")
+    .oneOf([y.ref("password"), ""], "Passwords do not match"),
 });

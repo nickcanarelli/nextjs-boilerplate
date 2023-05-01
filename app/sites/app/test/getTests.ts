@@ -1,4 +1,4 @@
-import { getBaseUrl } from "@utils";
+import { getBaseUrl } from "@actions";
 
 export async function getTest() {
   const res = await fetch(getBaseUrl() + "/api/hello");
