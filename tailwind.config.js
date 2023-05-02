@@ -396,6 +396,14 @@ module.exports = {
       boxShadow: {
         "input-focus": "0px 0px 10px rgb(var(--color-accent-primary) / 0.3)",
         "input-error": "0px 0px 10px rgb(var(--color-error-primary) / 0.3)",
+
+        elevation: {
+          xs: "0px 1px 2px rgba(0, 0, 0, 0.06), 0px 5px 4px -4px rgba(0, 0, 0, 0.02)",
+          sm: "0px 2px 2px rgba(0, 0, 0, 0.08), 0px 0px 2px rgba(0, 0, 0, 0.04)",
+          md: "0px 12px 12px -8px rgba(0, 0, 0, 0.08), 0px 0px 4px rgba(0, 0, 0, 0.04)",
+          lg: "0px 32px 40px -16px rgba(0, 0, 0, 0.12), 0px 2px 6px rgba(0, 0, 0, 0.06)",
+          xl: "0px 24px 48px -8px rgba(0, 0, 0, 0.12), 0px 48px 64px -24px rgba(0, 0, 0, 0.12)",
+        },
       },
       animation: {
         "bounce-h": "bounce-h 1s infinite",

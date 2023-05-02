@@ -6,7 +6,8 @@ const nextConfig = {
   },
   reactStrictMode: true,
   images: {
-    domains: ["robohash.org"],
+    dangerouslyAllowSVG: true,
+    domains: ["robohash.org", "tailwindui.com", "images.unsplash.com"],
   },
 };
 

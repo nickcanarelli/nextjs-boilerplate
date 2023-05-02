@@ -30,7 +30,8 @@
       "@helpers/*": ["./app/lib/helpers/*"],
       "@constants/*": ["./app/lib/constants/*"],
       "@components/core": ["./app/lib/components/core/index.ts"],
-      "@components/form": ["./app/lib/components/form/index.ts"]
+      "@components/form": ["./app/lib/components/form/index.ts"],
+      "@components/layout": ["./app/lib/components/layout/index.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

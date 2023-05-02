@@ -8,7 +8,18 @@ import {
 } from "@lib/middleware";
 
 export const config = {
-  matcher: ["/((?!api/|_next/|_static/|examples/|[\\w-]+\\.\\w+).*)"],
+  matcher: [
+    /*
+     * Match all paths except for:
+     * 1. /api/ routes
+     * 2. /_next/ (Next.js internals)
+     * 3. /_proxy/, /_auth/, /_root/ (special pages for OG tags proxying, password protection, and placeholder _root pages)
+     * 4. /_static (inside /public)
+     * 5. /_vercel (Vercel internals)
+     * 6. all root files inside /public (e.g. /favicon.ico)
+     */
+    "/((?!api/|_next/|_proxy/|_auth/|_root/|_static|_vercel|[\\w-]+\\.\\w+).*)",
+  ],
 };
 
 export async function middleware(req: NextRequest) {
