@@ -20,16 +20,17 @@
       }
     ],
     "paths": {
-      "@styles": ["./app/_styles/index.css"],
       "@api/*": ["./app/api/*"],
-      "@types": ["./app/_types/index.ts"],
-      "@hooks": ["./app/_utils/hooks/index.ts"],
-      "@helpers/*": ["./app/_utils/helpers/*"],
-      "@helpers": ["./app/_utils/helpers/index.ts"],
-      "@actions/*": ["./app/_utils/actions/*"],
-      "@actions": ["./app/_utils/actions/index.ts"],
-      "@components/core": ["./app/_components/core/index.ts"],
-      "@components/form": ["./app/_components/form/index.ts"]
+      "@lib/*": ["./app/lib/*"],
+      "@hooks": ["./app/lib/hooks/index.ts"],
+      "@styles": ["./app/lib/styles/index.css"],
+      "@actions": ["./app/lib/actions/index.ts"],
+      "@actions/*": ["./app/lib/actions/*"],
+      "@helpers": ["./app/lib/helpers/index.ts"],
+      "@helpers/*": ["./app/lib/helpers/*"],
+      "@constants/*": ["./app/lib/constants/*"],
+      "@components/core": ["./app/lib/components/core/index.ts"],
+      "@components/form": ["./app/lib/components/form/index.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

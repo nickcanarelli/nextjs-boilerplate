@@ -9,7 +9,7 @@ export default function Register() {
           Create your account
         </div>
         <p className="text-sm text-secondary">
-          Signing up for [NAME] is fast and 100% free, no credit card required.
+          Signing up is 100% free, no credit card required.
         </p>
       </div>
 

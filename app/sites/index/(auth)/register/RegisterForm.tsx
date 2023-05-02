@@ -4,6 +4,7 @@ import { FormWrapper, Password, Textfield } from "@components/form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { useRegister } from "@api/auth/register";
+import { useRouter } from "next/navigation";
 import { Button } from "@components/core";
 import { useForm } from "@hooks";
 import Link from "next/link";
@@ -12,11 +13,11 @@ import {
   faCircleArrowRight,
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
-import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
   const { mutateAsync: register, isLoading: isRegistering } = useRegister();
   const router = useRouter();
+
   const registerForm = useForm({
     schema,
   });
@@ -106,13 +107,13 @@ export default function RegisterForm() {
           Have an account?{" "}
           <Link
             href="/login"
-            className="ml-2 inline-flex cursor-pointer items-center gap-x-2 font-semibold text-accent-primary"
+            className="ml-2 inline-flex cursor-pointer items-center gap-x-2 font-semibold text-accent-primary group"
           >
             Log in{" "}
             <FontAwesomeIcon
               icon={faCircleArrowRight}
               aria-hidden="true"
-              className="text-sm"
+              className="text-sm group-hover:animate-bounce-h"
             />
           </Link>
         </div>

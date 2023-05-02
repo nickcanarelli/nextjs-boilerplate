@@ -9,24 +9,22 @@ import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 import { FormWrapper, Password, Textfield } from "@components/form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Transition } from "@headlessui/react";
+import { ENV_URLS } from "@lib/constants";
 import { Button } from "@components/core";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useForm } from "@hooks";
 import Link from "next/link";
 import * as y from "yup";
-import { Transition } from "@headlessui/react";
-
-const redirectUrl =
-  process.env.NODE_ENV === "production"
-    ? process.env.NEXT_PUBLIC_PROD_APP_URL
-    : process.env.NEXT_PUBLIC_DEV_APP_URL;
 
 export default function LoginForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const searchParams = useSearchParams();
+  const router = useRouter();
 
+  const callbackUrl = searchParams?.get("callbackUrl");
   const email = searchParams?.get("email");
 
   const loginForm = useForm({
@@ -42,8 +40,6 @@ export default function LoginForm() {
     formState: { errors },
   } = loginForm;
 
-  const callbackUrl = searchParams?.get("callbackUrl");
-
   const handleLogin: SubmitHandler<FieldValues> = async (values) => {
     setIsSubmitting(true);
     const { email, password } = values;
@@ -51,15 +47,14 @@ export default function LoginForm() {
     await signIn("credentials", {
       email,
       password,
-      redirect: true,
-      callbackUrl: callbackUrl ?? redirectUrl,
-    }).then((callback) => {
+      redirect: false,
+    }).then((res) => {
       setIsSubmitting(false);
-      if (callback?.ok && callback?.status === 200) {
+      if (!res?.error) {
         // success, do something with the response
-        console.log("success");
+        router.push(callbackUrl ? callbackUrl : ENV_URLS.app);
       }
-      if (callback?.error === "CredentialsSignin") {
+      if (res?.error === "CredentialsSignin") {
         setError("invalidCredentials", {
           type: "custom",
           message:
@@ -133,16 +128,16 @@ export default function LoginForm() {
         </Button>
 
         <div className="text-center text-sm font-medium text-secondary">
-          New to [NAME]?{" "}
+          Don&apos;t have an account?{" "}
           <Link
             href="/register"
-            className="ml-2 inline-flex cursor-pointer items-center gap-x-2 font-semibold text-accent-primary"
+            className="ml-2 inline-flex cursor-pointer items-center gap-x-2 font-semibold text-accent-primary group"
           >
             Sign up for free{" "}
             <FontAwesomeIcon
               icon={faCircleArrowRight}
               aria-hidden="true"
-              className="text-sm"
+              className="text-sm group-hover:animate-bounce-h"
             />
           </Link>
         </div>
@@ -156,17 +151,6 @@ const schema = y.object({
     .string()
     .email("Enter a valid email address")
     .required("Email address is required"),
-  password: y
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(99, "Password must be at most 99 characters")
-    .matches(/^(?=.*[a-z])/, "Must contain at least one lowercase character")
-    .matches(/^(?=.*[A-Z])/, "Must contain at least one uppercase character")
-    .matches(/^(?=.*[0-9])/, "Must contain at least one number")
-    .matches(
-      /^(?=.*[\^$*.[\]{}()?\-“!@#%&/,><`:;|_~`])/,
-      "Must contain at least one special character"
-    )
-    .required("Password is required"),
+  password: y.string().required("Password is required"),
   invalidCredentials: y.string().notRequired(),
 });

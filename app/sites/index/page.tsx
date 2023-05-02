@@ -1,4 +1,4 @@
-import { getCurrentServerSession } from "@actions";
+import getCurrentServerSession from "@actions/getCurrentServerSession";
 import { LoginButton, LogoutButton } from "./idk";
 import { ClientOnly } from "@components/core";
 

@@ -18,7 +18,7 @@ export default function ListUsers() {
         <p>Loading...</p>
       ) : data ? (
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          {data.map((user) => (
+          {data.map((user: any) => (
             <div
               key={user.id}
               className="col-span-1 md:col-span-3 bg-surface border border-light rounded-lg p-8"

@@ -4,6 +4,9 @@ import { prisma } from "@helpers/prisma";
 import { User } from "@prisma/client";
 import { compare } from "bcrypt";
 
+const allowedSubdomains = ["admin", "app"];
+
+const isProduction = process.env.NODE_ENV === "production";
 const useSecureCookies = process.env.NEXTAUTH_URL!.startsWith("https://");
 const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 const hostName = new URL(process.env.NEXTAUTH_URL!).hostname;
@@ -65,7 +68,11 @@ export const authOptions: NextAuthOptions = {
       const urlHostname = new URL(url).hostname.includes(".")
         ? new URL(url).hostname.split(".")[1]
         : new URL(url).hostname;
+      const currentSubdomain = isProduction
+        ? url.replace("https://", "").split(".")[0]
+        : url.replace("http://", "").split(".")[0];
 
+      if (allowedSubdomains.includes(currentSubdomain)) return url;
       if (url === process.env.NEXT_PUBLIC_DEV_APP_URL) return url;
       // Allows relative callback URLs
       if (url.startsWith("/")) return `${baseUrl}${url}`;

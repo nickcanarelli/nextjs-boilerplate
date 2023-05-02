@@ -1,6 +1,6 @@
-import { getQueryClient } from "@actions";
-import { Hydrate } from "@helpers";
 import { dehydrate } from "@tanstack/query-core";
+import getQueryClient from "@actions/getQueryClient";
+import Hydrate from "@helpers/hydrateClient";
 import { getTest } from "./getTests";
 import ShowTest from "./showTest";
 
