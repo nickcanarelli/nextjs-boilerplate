@@ -89,7 +89,10 @@ export default function UsersTable() {
                 key={headerGroup.id}
                 className="flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0 sm:w-[75px] mb-1"
               >
-                {headerGroup.headers.map((header: any, index: number) => {
+                {headerGroup.headers.map((header: any, headerIdx: number) => {
+                  const isFirstCell = headerIdx === 0;
+                  const isCheckbox = header.id === "checkbox";
+
                   return (
                     <th
                       key={header.id}
@@ -97,7 +100,12 @@ export default function UsersTable() {
                       {...{
                         onClick: header.column.getToggleSortingHandler(),
                       }}
-                      className="border-y border-light py-2.5 text-sm font-semibold leading-[22px] -tracking-[0.128px] text-primary px-4"
+                      className={clsx(
+                        "border-y border-light py-2.5 text-sm font-semibold leading-[22px] -tracking-[0.128px] text-primary px-4",
+                        {
+                          "w-[52px]": isCheckbox,
+                        }
+                      )}
                     >
                       {header.isPlaceholder ? null : (
                         <div className="flex gap-x-1 items-center ">
@@ -115,12 +123,30 @@ export default function UsersTable() {
           </thead>
           <tbody className="w-full px-4 flex-1">
             {table?.getRowModel()?.rows.map((row: any) => {
+              const isSelected = row.getIsSelected();
               return (
                 <Fragment key={row.id}>
-                  <tr className="bg-surface hover:bg-light flex flex-col flex-no wrap table-row transition-all duration-200 cursor-pointer">
+                  <tr
+                    className={clsx(
+                      "hover:bg-light flex flex-col flex-no wrap table-row transition-all duration-200",
+                      {
+                        "bg-light": isSelected,
+                        "bg-surface": !isSelected,
+                      }
+                    )}
+                  >
                     {row.getVisibleCells().map((cell: any, cellIdx: number) => {
+                      const isFirstCell = cellIdx === 0;
+                      const isCheckbox = cell.column.id === "checkbox";
+
                       return (
-                        <td key={cell.id} className="pl-4 h-[72px]">
+                        <td
+                          key={cell.id}
+                          className={clsx("h-[48px]", {
+                            "pl-4": !isFirstCell,
+                            "w-[52px]": isCheckbox,
+                          })}
+                        >
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

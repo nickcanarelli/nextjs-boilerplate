@@ -17,7 +17,7 @@ export async function POST(request: Request) {
       return new NextResponse(
         JSON.stringify({
           error:
-            "Email address already exists. If you forgot your password, try resetting it.",
+            "User already exists. If you forgot your password, try resetting it.",
         }),
         {
           status: 400,

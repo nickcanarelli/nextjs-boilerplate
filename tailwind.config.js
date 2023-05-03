@@ -183,6 +183,11 @@ module.exports = {
         },
         divider: "rgb(var(--color-divider) / <alpha-value>)",
         backdrop: "rgb(var(--color-backdrop) / <alpha-value>)",
+        surface: "rgb(var(--color-bg-surface) / <alpha-value>)",
+        light: "rgb(var(--color-bg-light) / <alpha-value>)",
+        medium: "rgb(var(--color-bg-medium) / <alpha-value>)",
+        contrast: "rgb(var(--color-bg-contrast) / <alpha-value>)",
+        canvas: "rgb(var(--color-bg-canvas) / <alpha-value>)",
         twitch: {
           primary: "rgb(var(--color-twitch-primary) / <alpha-value>)",
           medium: "rgb(var(--color-twitch-medium) / <alpha-value>)",

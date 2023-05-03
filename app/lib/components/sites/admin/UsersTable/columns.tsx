@@ -1,10 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
 import { HTMLProps, useEffect, useRef } from "react";
 
 export const columns: ColumnDef<any>[] = [
   {
-    id: "select",
+    id: "checkbox",
     header: ({ table }) => (
       <IndeterminateCheckbox
         {...{
@@ -15,7 +14,7 @@ export const columns: ColumnDef<any>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className="px-1">
+      <div className="w-[52px] flex items-center justify-center">
         <IndeterminateCheckbox
           {...{
             checked: row.getIsSelected(),
@@ -33,23 +32,9 @@ export const columns: ColumnDef<any>[] = [
     accessorFn: (row) => row.email,
     cell: (info) => (
       <div className="flex flex-row gap-x-3 items-center shrink-0">
-        <Image
-          className="rounded-full "
-          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-          alt=""
-          width={"40"}
-          height={"40"}
-        />
-        <div className="flex flex-col">
-          <span className="sr-only">Your profile</span>
-          <span
-            className="font-semibold text-sm text-primary"
-            aria-hidden="true"
-          >
-            {info.getValue<string>()}
-          </span>
-          <span className="text-secondary font-normal text-xs">@tom_cook</span>
-        </div>
+        <span className="font-semibold text-sm text-primary" aria-hidden="true">
+          {info.getValue<string>()}
+        </span>
       </div>
     ),
     filterFn: "arrIncludesSome",
@@ -107,11 +92,16 @@ function IndeterminateCheckbox({
   }, [ref, indeterminate, rest.checked]);
 
   return (
-    <input
-      type="checkbox"
-      ref={ref}
-      className={className + " cursor-pointer"}
-      {...rest}
-    />
+    <>
+      <input
+        type="checkbox"
+        ref={ref}
+        className={
+          className +
+          "h-5 w-5 border-1 rounded-md border-light bg-surface text-accent-primary outline-none cursor-pointer hover:border-dark hover:ring-2 hover:ring-neutral-alpha-200 transition-all duration-150 without-ring disabled:bg-neutral-alpha-100 disabled:border-disabled disabled:hover:border-disabled disabled:hover:ring-0 disabled:cursor-default"
+        }
+        {...rest}
+      />
+    </>
   );
 }

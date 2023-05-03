@@ -53,11 +53,15 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
+        console.log("user: ", user);
+
         return {
           id: user.id + "",
           email: user.email,
           role: user.role,
           name: user.name,
+          stripeCustomerId: user.stripeCustomerId ?? "",
+          stripeSubscriptionId: user.stripeSubscriptionId ?? "",
         };
       },
     }),
@@ -92,13 +96,15 @@ export const authOptions: NextAuthOptions = {
           ...token,
           id: u.id,
           role: u.role,
+          stripeCustomerId: u.stripeCustomerId ?? "",
+          stripeSubscriptionId: u.stripeSubscriptionId ?? "",
           // Add more user details here to then set on the session
         };
       }
       return token;
     },
     async session({ session, token }) {
-      // console.log("Session Callback", { session, token });
+      console.log("Session Callback", { session, token });
 
       return {
         ...session,
@@ -106,6 +112,8 @@ export const authOptions: NextAuthOptions = {
           ...session.user,
           id: token.id,
           role: token.role,
+          stripeCustomerId: token.stripeCustomerId ?? "",
+          stripeSubscriptionId: token.stripeSubscriptionId ?? "",
           // Add more user details here
         },
       };
